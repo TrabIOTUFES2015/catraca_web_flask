@@ -23,6 +23,7 @@ to use the Serial Stream"
 
 from stream import Stream #, TimeoutException
 from threading import Thread
+import time
 
 class SerialStream( Stream ):
     """ A stream using the pyserial interface """
@@ -46,7 +47,7 @@ class SerialStream( Stream ):
 
         str_list = []
         while True:
-            sleep(0.01)
+            time.sleep(0.01)
             nextchar = self.read(100)
             if nextchar:
                 str_list.append(nextchar)

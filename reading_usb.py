@@ -13,11 +13,12 @@ def receiving(ser):
         buffer = ser.read(ser.inWaiting())
         # if '\n' in buffer:
         #     last_received, buffer = buffer.split('\n')[-2:]
-        print(buffer.decode('LATIN1'))
+        #print(buffer.decode('LATIN1'))
         # buffer1 = buffer.decode('utf-8')
         # print(buffer1)
         # buffer2 = unicode(buffer)
-        # print(buffer)
+        if (buffer):
+            print(buffer)
         # print(type(buffer))
         sleep(1)
 
@@ -34,7 +35,7 @@ if __name__ ==  '__main__':
         xonxoff=0,
         rtscts=0,
         interCharTimeout=None,
-        bytesize=8, parity=PARITY_EVEN, stopbits=STOPBITS_ONE
+        bytesize=8, parity=PARITY_NONE, stopbits=STOPBITS_ONE
     )
 
     t = Thread(target=receiving, args=(ser,))
