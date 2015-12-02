@@ -1,0 +1,42 @@
+<head>
+    <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+    <title>TEST</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+    <script>
+
+        $(document).ready(function(){
+            if (!!window.EventSource) {
+                console.log('SSE supported.');
+                var source = new EventSource('http://localhost:8080/barcode2');
+
+                source.addEventListener('message', function(e) {
+                  //console.log(e.data);
+                  var txtSaida = $('#txtSaida')
+                  var s = txtSaida.val() + '\n' + e.data
+                  txtSaida.val(s)
+
+                }, false);
+
+                source.addEventListener('open', function(e) {
+                  console.log('Connection was opened.');
+                }, false);
+
+                source.addEventListener('error', function(e) {
+                  if (e.readyState == EventSource.CLOSED) {
+                    console.log('Connection was closed.');
+                  }
+                }, false);
+
+            } else {
+                console.log('SSE notsupported.');
+            }
+        });
+
+    </script>
+</head>
+
+<body>
+    <textarea id='txtSaida'></textarea>
+
+</body>
+</html>
