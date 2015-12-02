@@ -35,16 +35,16 @@ class SerialStream( Stream ):
         Stream.__init__( self )
         self.port = serial.Serial( **kw )
         #self.port.open() # Seems to cause "permission denied" with PySerial 2.x
-        self.listObservadores = []         
+        self.handlersList = []         
         t = Thread(target=self.startService)
         t.start()
         self.servico = t
+        self.msg = ''
+        self.msgId = 1
 
 
 
     def startService(self):
-
-
         str_list = []
         while True:
             time.sleep(0.01)
@@ -52,17 +52,22 @@ class SerialStream( Stream ):
             if nextchar:
                 str_list.append(nextchar)
             else:
-                if len(str_list) > 0:
-                    # yield 'id:' + str(messageid2) + '\n' + 'data:' + ''.join(str_list) + '\n\n'
-                    # messageid2 += 1
-                    # str_list = []
-                    msg = ''.join(str_list)
-                    for obs in self.listObservadores:
-                        obs.chegouMsg(msg)
+                if len(str_list) > 0:                    
+                    self.msg = ''.join(str_list)
+                    print self.msg
+                    self.msgId += 1
+                    for handler in self.handlersList:
+                        handler(self.msgId, self.msg)
 
     #obs deve implementar chegouMsg
-    def subscribe(self, obs):
-        self.listObservadores.append(obs)
+    def subscribe(self, handler):
+        if handler not in self.handlersList:
+            self.handlersList.append(handler)
+
+    def last_msg(self):
+        obj = {'id': self.msgId, 'msg': self.msg }
+ #       print obj
+        return obj
 
     def flush( self ):
         """ Flush the port """

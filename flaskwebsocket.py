@@ -12,19 +12,16 @@ ser = None
 
 
 def event_barcode():
-    messageid = 0
-    
-    str_list = []
+    msg = ser.last_msg()
     while True:
         sleep(0.01)
-        nextchar = ser.read(100)
-        if nextchar:
-            str_list.append(nextchar)
-        else:
-            if len(str_list) > 0:
-                yield 'id:' + str(messageid) + '\n' + 'data:' + ''.join(str_list) + '\n\n'
-                messageid += 1
-                str_list = []
+        last_msg = ser.last_msg()
+        #print msg
+        #print last_msg
+        if last_msg and msg != last_msg:
+            print 'entrou'
+            msg = last_msg
+            yield 'id:' + str(msg['id']) + '\n' + 'data:' + msg['msg'] + '\n\n'
 
 def startUsbStream():
     messageid = 0
@@ -44,21 +41,17 @@ def startUsbStream():
     )   
 
 
+
 def event_barcode2():
-    messageid2 = 0
-    
-    str_list = []
+    msg = ser.last_msg()
     while True:
         sleep(0.01)
-        nextchar = ser.read(100)
-        if nextchar:
-            str_list.append(nextchar)
-        else:
-            if len(str_list) > 0:
-                yield 'id:' + str(messageid2) + '\n' + 'data:' + ''.join(str_list) + '\n\n'
-                messageid2 += 1
-                str_list = []
-
+        last_msg = ser.last_msg()
+        if last_msg and msg != last_msg:
+            msg = last_msg
+            yield 'id:' + str(msg['id']) + '\n' + 'data:' + msg['msg'] + '\n\n'
+   
+               
 
 
 
