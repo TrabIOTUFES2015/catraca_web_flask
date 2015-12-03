@@ -14,12 +14,11 @@ ser = None
 def event_barcode():
     msg = ser.last_msg()
     while True:
-        sleep(0.01)
+        sleep(0.100)
         last_msg = ser.last_msg()
         #print msg
-        #print last_msg
+        # print last_msg
         if last_msg and msg != last_msg:
-            print 'entrou'
             msg = last_msg
             yield 'id:' + str(msg['id']) + '\n' + 'data:' + msg['msg'] + '\n\n'
 

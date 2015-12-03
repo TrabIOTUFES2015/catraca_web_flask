@@ -24,6 +24,7 @@ to use the Serial Stream"
 from stream import Stream #, TimeoutException
 from threading import Thread
 import time
+from collections import deque
 
 class SerialStream( Stream ):
     """ A stream using the pyserial interface """
@@ -37,35 +38,48 @@ class SerialStream( Stream ):
         #self.port.open() # Seems to cause "permission denied" with PySerial 2.x
         self.handlersList = []         
         t = Thread(target=self.startService)
+        t.setDaemon(True)
         t.start()
+        # t.join(5)
         self.servico = t
         self.msg = ''
         self.msgId = 1
+        self.leitura = deque(maxlen=4)
 
 
 
     def startService(self):
+        msgId = 0
         str_list = []
+        print 'iniciando servico'
         while True:
-            time.sleep(0.01)
-            nextchar = self.read(100)
-            if nextchar:
-                str_list.append(nextchar)
-            else:
-                if len(str_list) > 0:                    
-                    self.msg = ''.join(str_list)
-                    print self.msg
-                    self.msgId += 1
-                    for handler in self.handlersList:
-                        handler(self.msgId, self.msg)
+            time.sleep(0.02)
+            msg = self.read(100)           
+            
+            if msg:            
+                msg = ''.join(i for i in msg if ord(i)<128)
+                # print "servico:" + self.msg
+                msgId += 1
+                obj = {'id': msgId, 'msg': msg }
+                
+                # print "startService:" + str(self.leitura)
+
+                if (obj not in self.leitura):
+                    self.leitura.append(obj)
+
+                for handler in self.handlersList:
+                    handler(self.msgId, self.msg)
 
     #obs deve implementar chegouMsg
     def subscribe(self, handler):
         if handler not in self.handlersList:
             self.handlersList.append(handler)
 
-    def last_msg(self):
-        obj = {'id': self.msgId, 'msg': self.msg }
+    def last_msg(self):        
+        obj = None
+        if self.leitura:
+            # print "last_msg:" + str(self.leitura)
+            obj = self.leitura[-1]
  #       print obj
         return obj
 
