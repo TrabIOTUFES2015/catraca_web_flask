@@ -15,7 +15,7 @@ def event_barcode():
     msg = ser.last_msg()
     while True:
         sleep(0.100)
-        last_msg = ser.last_msg()
+        last_msg = ser.last_msg() 
         #print msg
         # print last_msg
         if last_msg and msg != last_msg:
@@ -80,8 +80,13 @@ def barcode2():
     newresponse.headers.add('Cache-Control', 'no-cache')
     return newresponse
 
+@app.route('/')
+def index():
+    return render_template('index.html')
+    #pass
 
 
 if __name__ == '__main__':
     ser = startUsbStream()
     app.run(port=8080, threaded=True)
+    #app.view_functions['index'] = index

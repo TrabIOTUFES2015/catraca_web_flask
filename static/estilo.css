@@ -1,0 +1,104 @@
+*{margin: 0; padding: 0}
+body{background: #f2f2f2; font-family: 'Roboto Condensed', sans-serif;}
+#estrutura{float: left; width: 100%; box-shadow: 0 0 25px 0 rgba(50, 50, 50, 0.5);}
+.centro1{margin: 0 auto; width: 980px}
+.centro2{margin: 0 auto; width: 950px}
+
+/****** TOPO *******/
+header{float: left; width: 100%; margin-top: 28px;}
+	h1{font-size: 30px; line-height: 200%; text-align: center; font-family: 'Roboto Condensed', sans-serif;}
+	#logo{float: right; width: 935px}
+	nav{float: left; width: 100%; height: 40px; background:#0082c8; border-top: solid 1px #c3dbe7; border-bottom: solid 1px #c3dbe7; margin-top: 24px}
+		nav ul{float: left; list-style-type: none; width: 100%; height: 100%}
+			nav ul li{float: left; height: 100%; font-size: 19px; line-height: 200%; text-align: center; font-family: 'Roboto Condensed', sans-serif;}
+				nav ul li a{float: left; height: 100%; padding: 0 15px; transition: all 300ms linear; color: #ffffff; text-decoration: none}
+				nav ul li a:hover{background: #065d9e}
+
+/****** CENTRO *******/
+#conteudo{float: left; width: 100%; margin-top: 20px}
+	#box_info{margin:0 auto; width: 620px; min-height: 390px; height: auto; border: solid 1px #cccccc;}
+		.page_info{float: left; width: 590px; margin: 15px; display: none}
+		#page_index{display: block}
+	.sombra{margin:0 auto; width: 620px; height: 10px; background: url(imagens/sombra.png); }
+	
+		/*** Pagina Inicial ***/
+		textarea {resize: none;}
+				
+		article{float: left; width: 580px; margin-top: 15px; margin-left: 4px;}
+			article h1{float: left; width: 100%; font-size: 18px; margin-bottom: 10px}
+			article p{float: left; width: 100%; font-size: 14px; line-height: 150%; color: #626262; text-align: justify}
+			article ul{float: left; margin-left: 20px}
+			select{float: left; width: 100%; font-size: 16px; margin-bottom: 10px}
+			
+		
+		/*** Formulario ***/
+
+		#formulario {margin: 0 auto; width: 459px;}
+		
+		.label-form{display: block; margin-top: 20px; letter-spacing: 2px}
+		.conteudo_form form {
+			margin: 0 auto;
+			width: 459px;
+		}
+		.textarea {
+			height: 213px;
+		}
+		.input-form, .textarea {
+			width: 439px;
+			height: 27px;
+			background: #ffffff;
+			border: 1px solid #dedede;
+			padding: 10px;
+			margin-top: 3px;
+			font-size: 0.9em;
+			color: #3a3a3a;
+			-moz-border-radius: 5px;
+			-webkit-border-radius: 5px;
+			border-radius: 5px;
+		}
+		.input-form :focus, .textarea:focus {
+			border: 1px solid #97d6eb;
+		}
+		
+		.bt_submit {
+			
+			margin-left: 5px;
+			background: #0082c8;
+			color: #ffffff;
+			margin-left: 35%;
+			width:127px;
+			height:26px;
+			border:none;
+			margin-top:5px;
+			margin-bottom:2px;
+			cursor:pointer;
+		}
+		.button {
+			
+			margin-left: 5px;
+			background: #0082c8;
+			color: #ffffff;
+			margin-left: 35%;
+			width:127px;
+			height:38px;
+			border:none;
+			margin-top:20px;
+			cursor:pointer;
+		}
+		.bt_submit:hover {
+			background: #0f96df;
+			cursor: pointer
+		}
+		
+/****** RODAPE *******/
+footer{float: left; width: 100%; height: 66px; background: #0082c8; border-top: solid 1px #0169a1; border-bottom: solid 1px #0169a1; margin-top: 30px }
+	footer p{text-align: center; color: #ffffff; margin-top:15px;}
+.by{font-size:12px; margin-top:5px;}
+
+table {
+	width: 100%;
+	text-align:center;
+}
+table th {
+	width: 33%;
+}
