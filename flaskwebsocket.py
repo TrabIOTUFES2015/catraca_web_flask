@@ -1,13 +1,17 @@
-from flask import Flask, render_template, Response
+from flask import Flask, render_template, Response, jsonify
 from serial import *
 from time import sleep
 from serial_stream import SerialStream
+from service import *
+
 # from flask_socketio import SocketIO
 
 app = Flask(__name__)
 app.debug = True
 # socketio = SocketIO(app)
 ser = None
+service = None
+
 
 
 
@@ -53,6 +57,18 @@ def event_barcode2():
                
 
 
+@app.route('/sensores')
+def sensores():
+    sensores = service.listarSensores()
+    strHtml = ""
+    for s in sensores:
+        strId = str(s.id)
+        strHtml += "<option id=" + strId + ">" + strId +"</option>"
+
+    return strHtml
+
+    #return jsonify(sensores)
+
 
 
 @app.route('/debug/')
@@ -88,5 +104,7 @@ def index():
 
 if __name__ == '__main__':
     ser = startUsbStream()
+    service = CatracaService(ser)
     app.run(port=8080, threaded=True)
+
     #app.view_functions['index'] = index

@@ -16,11 +16,22 @@ $(document).ready(function(){
 	});	
 
 	//transicao de pagina
-	$( "#limpar" ).click(request);
+	$( "#limpar" ).click(function limpaTextArea (argument) {
+		var txtSaida = $('#console')
+		txtSaida.val('')
+		// body...
+	});
 	$( "#consultar" ).click(request);
     $( "#pesquisar").click(request);
 	$( "#exibir").click(request);
 	$( "#criar" ).click(criarCatraca);
+
+	$('#linkCriacao').click(
+		function clickLinkCriacao(argument) {
+			var cmbSensorA = $('#sensorA')
+			cmbSensorA.load('http://localhost:8080/sensores')
+		} 
+	)
 	
 	
 });
