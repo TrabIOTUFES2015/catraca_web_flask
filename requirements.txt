@@ -10,4 +10,5 @@ pyserial==2.7
 python-engineio==0.8.0
 python-socketio==0.7.0
 six==1.10.0
+stream==0.8
 wsgiref==0.1.2
