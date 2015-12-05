@@ -104,7 +104,7 @@ def index():
 
 if __name__ == '__main__':
     ser = startUsbStream()
-    service = CatracaService(ser)
+    #service = CatracaService(ser)
     app.run(port=8080, threaded=True)
 
     #app.view_functions['index'] = index

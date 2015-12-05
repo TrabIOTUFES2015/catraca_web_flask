@@ -15,7 +15,7 @@ An implementation of the Steam interface using pyserial
 
 try:
     # PySerial Module
-    import serial
+    from serial import Serial, SerialException
 except:
     print "This module requires the pySerial to be installed \
 to use the Serial Stream"
@@ -34,7 +34,7 @@ class SerialStream( Stream ):
         **kw - keyword arguments to pass into a pySerial serial port
         """
         Stream.__init__( self )
-        self.port = serial.Serial( **kw )
+        self.port = Serial( **kw )
         #self.port.open() # Seems to cause "permission denied" with PySerial 2.x
         self.handlersList = []         
         t = Thread(target=self.startService)
@@ -91,9 +91,13 @@ class SerialStream( Stream ):
         count - maximum number of bytes to read
         throws TimeoutException if read returns empty or None
         """
-        buf = self.port.read( count )
-        # if len( buf ) == 0:
-        #     raise TimeoutException()
+        buf = ''
+        try:
+            buf = self.port.read( count )
+        except SerialException:
+            self.port.close()
+            self.port.open()
+
         return buf
             
     def write( self, buf ):

@@ -55,6 +55,8 @@ class CatracaService(object):
 
 		if (len(params) > 1):
 
+			sensorId = params[1]
+
 			if len(params) > 3:
 				valor = params[2]
 
@@ -64,11 +66,11 @@ class CatracaService(object):
 			#constroi sensor para busca
 			sensor = None
 			for s in self.sensores:
-				if s.id == sensorId:
+				if str(s.id) == sensorId:
 					sensor = s
 
 			if not sensor:
-				sensor = Sensor(id=len(self.sensores))
+				sensor = Sensor(id=int(sensorId))
 				self.sensores.append(sensor)
 
 			if nomePacote == 'LEITURA':
