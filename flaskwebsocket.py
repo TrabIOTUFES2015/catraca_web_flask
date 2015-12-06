@@ -30,17 +30,7 @@ def startUsbStream():
     messageid = 0
     return SerialStream(
         port='/dev/ttyUSB1',
-        baudrate=57600,
-        # baudrate=111200,
-        # baudrate=96600,
-        # bytesize=EIGHTBITS,
-        # parity=PARITY_NONE,
-        # stopbits=STOPBITS_ONE,
-        timeout=0.1,
-        xonxoff=0,
-        rtscts=0,
-        interCharTimeout=None,
-        bytesize=8, parity=PARITY_NONE, stopbits=STOPBITS_ONE
+        baudrate=57600        
     )   
 
 
@@ -104,7 +94,7 @@ def index():
 
 if __name__ == '__main__':
     ser = startUsbStream()
-    #service = CatracaService(ser)
+    service = CatracaService(ser)
     app.run(port=8080, threaded=True)
 
     #app.view_functions['index'] = index

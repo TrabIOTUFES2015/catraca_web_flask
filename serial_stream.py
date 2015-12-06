@@ -25,17 +25,31 @@ from stream import Stream #, TimeoutException
 from threading import Thread
 import time
 from collections import deque
+from tos import AM, Serial as SerialTOS
+
+def serialStreamProcessorHook(packet):
+    if not packet or packet.type != 100:
+        return
+    else:
+        s = "".join([chr(i) for i in packet.data]).strip('\0')
+        # lines = s.split('\n')
+        # for line in lines:
+        #     if line: print "PRINTF:", line
+        return s
+        
 
 class SerialStream( Stream ):
     """ A stream using the pyserial interface """
-    def __init__( self, **kw ):
-        """ Default constructor
-        Creates and opens a serial port
-        **kw - keyword arguments to pass into a pySerial serial port
-        """
-        Stream.__init__( self )
-        self.port = Serial( **kw )
-        #self.port.open() # Seems to cause "permission denied" with PySerial 2.x
+    # def __init__( self, **kw ):
+    #     """ Default constructor
+    #     Creates and opens a serial port
+    #     **kw - keyword arguments to pass into a pySerial serial port
+    #     """
+    def __init__(self, port, baudrate):
+        # Stream.__init__( self )
+        # self.am = Serial( **kw )
+        #self.am.open() # Seems to cause "permission denied" with PySerial 2.x
+        self.am = AM(SerialTOS(port, baudrate), serialStreamProcessorHook)
         self.handlersList = []         
         t = Thread(target=self.startService)
         t.setDaemon(True)
@@ -54,21 +68,25 @@ class SerialStream( Stream ):
         print 'iniciando servico'
         while True:
             time.sleep(0.02)
-            msg = self.read(100)           
+            msgRead = self.read()     
+
             
-            if msg:            
-                msg = ''.join(i for i in msg if ord(i)<128)
-                # print "servico:" + self.msg
-                msgId += 1
-                obj = {'id': msgId, 'msg': msg }
-                
-                # print "startService:" + str(self.leitura)
+            if msgRead:          
+                msgs = msgRead.split('\n')   
+                for msg in msgs:
+                    if (msg):
+                        # msg = ''.join(i for i in msg if ord(i)<128)
+                        # print "servico:" + self.msg
+                        msgId += 1
+                        obj = {'id': msgId, 'msg': msg }
+                        
+                        print "startService:" + msg
 
-                if (obj not in self.leitura):
-                    self.leitura.append(obj)
+                        if (obj not in self.leitura):
+                            self.leitura.append(obj)
 
-                for handler in self.handlersList:
-                    handler(self.msgId, self.msg)
+                        for handler in self.handlersList:
+                            handler(self.msgId, self.msg)
 
     #obs deve implementar chegouMsg
     def subscribe(self, handler):
@@ -85,19 +103,14 @@ class SerialStream( Stream ):
 
     def flush( self ):
         """ Flush the port """
-        self.port.flush()
-    def read( self, count ):
+        self.am.flush()
+    def read(self):
         """ Read up to count bytes 
         count - maximum number of bytes to read
         throws TimeoutException if read returns empty or None
         """
-        buf = ''
-        try:
-            buf = self.port.read( count )
-        except SerialException:
-            self.port.close()
-            self.port.open()
-
+        buf = self.am.read()
+        print 'Read: ', buf
         return buf
             
     def write( self, buf ):
@@ -106,18 +119,18 @@ class SerialStream( Stream ):
         """
         if isinstance( buf, list ):
             buf = ''.join( [chr( c ) for c in buf] )
-        self.port.write( buf )
+        self.am.write( buf )
     def get_read_timeout( self ):
         """ Get the read timeout """
-        return self.port.timeout 
+        return self.am.timeout 
     def set_read_timeout( self, value ):
         """ Set the read timeout """
-        self.port.timeout = value
+        self.am.timeout = value
     def get_write_timeout( self ):
         """ Get the write timeout """
-        return self.port.writeTimeout 
+        return self.am.writeTimeout 
     def set_write_timeout( self, value ):
         """ Set the write timeout """
-        self.port.writeTimeout = value
+        self.am.writeTimeout = value
     def close(self):
-        self.port.close()
+        self.am.close()
