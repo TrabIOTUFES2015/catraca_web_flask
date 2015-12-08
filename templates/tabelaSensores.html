@@ -1,0 +1,17 @@
+<table id=Pesquisar>
+    <thead>
+    <tr>
+        <th>Sensor</th>
+        <th>Hora de Envio</th>
+        <th>Valor</th>
+    </tr>
+    <tr>
+    {%for sensor in sensoresList%}
+        <tr>
+            <td>{{ sensor.id }}</td>
+            <td>{{ sensor.lastLeitura().dataHora.strftime('%d/%m/%y %H:%M:%S') }}</td>
+            <td>{{ sensor.lastLeitura().valor }}</td>
+        </tr>
+    {%endfor%}
+    </thead>
+</table>

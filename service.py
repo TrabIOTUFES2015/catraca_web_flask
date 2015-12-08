@@ -23,12 +23,13 @@ class Sensor(object):
 		
 
 	def addLeitura(self, valor):
+		from datetime import datetime
 		self.pacotePendente = True
-		leitura = {'id': len(self.leituras), 'valor': valor}
+		leitura = {'id': len(self.leituras), 'valor': int(valor), 'dataHora': datetime.now()}
 		self.leituras.append(leitura)
 		return leitura
 
-	def lastLeitura():
+	def lastLeitura(self):
 		return self.leituras[-1]
 
 
@@ -42,9 +43,11 @@ class CatracaService(object):
 		self.streamService = streamService
 		self.sensores = []
 		self.catracas = []
-		t = Thread(target=self.streamPacketService)
+		t = Thread(name='CatracaService.streamService', target=self.streamPacketService)
 		t.setDaemon(True)
 		t.start()
+		self.streamServiceThread = t
+
 
 	def processarPacote(self, pacote):
 		msg = pacote['msg']
@@ -55,26 +58,32 @@ class CatracaService(object):
 
 		if (len(params) > 1):
 
-			sensorId = params[1]
-
-			if len(params) > 3:
-				valor = params[2]
 
 			if nomePacote == 'CATRACA':
 				print 'Pacote configuracao'
 
+			sensorId = int(params[1])
+
 			#constroi sensor para busca
 			sensor = None
 			for s in self.sensores:
-				if str(s.id) == sensorId:
+				if s.id == sensorId:
 					sensor = s
 
 			if not sensor:
-				sensor = Sensor(id=int(sensorId))
+				sensor = Sensor(id=sensorId)
 				self.sensores.append(sensor)
 
-			if nomePacote == 'LEITURA':
+
+			if len(params) > 3 and nomePacote == 'LEITURA':
+				valor = params[2]
 				sensor.addLeitura(valor)
+
+
+
+
+
+
 
 
 	def listarSensores(self):

@@ -30,7 +30,17 @@ $(document).ready(function(){
 		function clickLinkCriacao(argument) {
 			var cmbSensorA = $('#sensorA')
 			cmbSensorA.load('http://localhost:8080/sensores')
-		} 
+
+			var cmbSensorA = $('#sensorB')
+			cmbSensorA.load('http://localhost:8080/sensores')
+		}
+	)
+
+	$('#linkSensores').click(
+		function clickLinkSensores(argument) {
+			var divTabelaSensores = $('#divTabelaSensores')
+			divTabelaSensores.load('http://localhost:8080/ultimasLeituras')
+		}
 	)
 	
 	

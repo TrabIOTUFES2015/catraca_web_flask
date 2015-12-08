@@ -53,11 +53,17 @@ def sensores():
     strHtml = ""
     for s in sensores:
         strId = str(s.id)
-        strHtml += "<option id=" + strId + ">" + strId +"</option>"
+        strHtml += "<option id=" + strId + ">TOS_NODE_ID=" + strId +"</option>"
 
     return strHtml
 
     #return jsonify(sensores)
+
+@app.route('/ultimasLeituras')
+def ultimasLeituras():
+    sensores = service.listarSensores()
+    return render_template('tabelaSensores.html', sensoresList=sensores)
+
 
 
 
