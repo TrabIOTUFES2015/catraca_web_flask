@@ -1,1 +1,5 @@
 cwebapp_env
+*.pyc
+cwapp_env
+*.iml
+.idea
