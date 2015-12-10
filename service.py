@@ -5,7 +5,8 @@ from collections import deque
 
 class Catraca(object):
 
-	def ___init__(self, id, sensor1, sensor2):
+	"""docstring for Catraca"""
+	def __init__(self, id, sensor1, sensor2):
 		super(Catraca, self).__init__()
 		self.id = id
 		self.sensorA = sensor1
