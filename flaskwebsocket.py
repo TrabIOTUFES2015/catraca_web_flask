@@ -1,4 +1,4 @@
-from flask import Flask, render_template, Response, jsonify
+from flask import Flask, render_template, Response, jsonify, request
 from serial import *
 from time import sleep
 from serial_stream import SerialStream
@@ -49,7 +49,7 @@ def event_barcode2():
 
 @app.route('/sensores')
 def sensores():
-    sensores = service.listarSensores()
+    sensores = service.listarSensoresLivres()
     strHtml = ""
     for s in sensores:
         strId = str(s.id)
@@ -57,11 +57,41 @@ def sensores():
 
     return strHtml
 
-    #return jsonify(sensores)
+@app.route('/criarCatraca')
+def criarCatraca():
+    sensorId1 = request.args.get('sensorId1')
+    sensorId2 = request.args.get('sensorId2')
+    catraca = None
+
+    sensor1 = next(sensor for sensor in service.sensores if sensor.id == int(sensorId1))
+    sensor2 = next(sensor for sensor in service.sensores if sensor.id == int(sensorId2))
+    if (sensor1 and sensor2):
+        catraca = service.criarCatraca(sensor1, sensor2)
+
+    if (catraca):
+        return str(catraca)
+    else:
+        return 'Falha na associacao. Recarregue a pagina de associacao.'
+
+
+
+@app.route('/catracas')
+def catracas():
+    catracas = service.catracas()
+    strHtml = ""
+    for s in catracas:
+        strId = str(s.id)
+        strHtml += "<option id=" + strId + ">TOS_NODE_ID=" + strId +"</option>"
+
+    return strHtml
+
+
+
+
 
 @app.route('/ultimasLeituras')
 def ultimasLeituras():
-    sensores = service.listarSensores()
+    sensores = service.sensores
     return render_template('tabelaSensores.html', sensoresList=sensores)
 
 

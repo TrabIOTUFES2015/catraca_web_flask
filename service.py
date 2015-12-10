@@ -5,22 +5,28 @@ from collections import deque
 
 class Catraca(object):
 
-	__slots__ = ['name', 'sensorAId', 'sensorBId']
+	def ___init__(self, id, sensor1, sensor2):
+		super(Catraca, self).__init__()
+		self.id = id
+		self.sensorA = sensor1
+		self.sensorB = sensor2
 
-	def ___init__(self, name, sensor1, sensor2):
-		self.name = name
-		self.sensorAId = sensorAId
-		self.sensorBId = sensorBId
+	def __eq__(self, other):
+		return self.id == other.id
+
+	def __str__(self):
+		return self.id , '|' , self.sensorA.id,  '|', self.sensorB.id
+
 
 
 class Sensor(object):
 	"""docstring for Sensor"""
 	def __init__(self, id):
-		super(Sensor, self).__init__()		
+		super(Sensor, self).__init__()
 		self.leituras = deque(maxlen=4)
 		self.pacotePendente = False
 		self.id = id
-		
+
 
 	def addLeitura(self, valor):
 		from datetime import datetime
@@ -30,7 +36,13 @@ class Sensor(object):
 		return leitura
 
 	def lastLeitura(self):
-		return self.leituras[-1]
+		if self.leituras:
+			return self.leituras[-1]
+		else:
+			return None
+
+	def __eq__(self, other):
+		return self.id == other.id
 
 
 class CatracaService(object):
@@ -53,7 +65,7 @@ class CatracaService(object):
 		msg = pacote['msg']
 		params = msg.split('|')
 		nomePacote = params[0]
-		sensorId = None
+		sensor_id = None
 		valor = None
 
 		if (len(params) > 1):
@@ -62,16 +74,16 @@ class CatracaService(object):
 			if nomePacote == 'CATRACA':
 				print 'Pacote configuracao'
 
-			sensorId = int(params[1])
+			sensor_id = int(params[1])
 
 			#constroi sensor para busca
 			sensor = None
 			for s in self.sensores:
-				if s.id == sensorId:
+				if s.id == sensor_id:
 					sensor = s
 
 			if not sensor:
-				sensor = Sensor(id=sensorId)
+				sensor = Sensor(id=sensor_id)
 				self.sensores.append(sensor)
 
 
@@ -83,22 +95,24 @@ class CatracaService(object):
 
 
 
+	def criarCatraca(self, sensor1, sensor2):
+		# TODO check for sensors already used
+		catraca = Catraca(len(self.catracas), sensor1, sensor2)
+		self.catracas.append(catraca)
+		return  catraca
 
 
-
-	def listarSensores(self):
-		return self.sensores
-
-
-
-
+	def listarSensoresLivres(self):
+		sensoresEmCatracas = map(lambda catraca: [catraca.sensorA, catraca.sensorB], self.catracas)
+		sensoresNaoUtilizados = [sensor for sensor in self.sensores if sensor not in sensoresEmCatracas]
+		return sensoresNaoUtilizados
 
 
 	def streamPacketService(self):
 		msg = self.streamService.last_msg()
 		while True:
 		    sleep(0.01)
-		    last_msg = self.streamService.last_msg() 
+		    last_msg = self.streamService.last_msg()
 		    #print msg
 		    # print last_msg
 		    if last_msg and msg != last_msg:
