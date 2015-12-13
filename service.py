@@ -51,15 +51,16 @@ class CatracaService(object):
 
 
 
-	def __init__(self, streamService):
+	def __init__(self, streamService=None):
 		super(CatracaService, self).__init__()
 		self.streamService = streamService
 		self.sensores = []
 		self.catracas = []
-		t = Thread(name='CatracaService.streamService', target=self.streamPacketService)
-		t.setDaemon(True)
-		t.start()
-		self.streamServiceThread = t
+		if streamService:
+			t = Thread(name='CatracaService.streamService', target=self.streamPacketService)
+			t.setDaemon(True)
+			t.start()
+			self.streamServiceThread = t
 
 
 	def processarPacote(self, pacote):
