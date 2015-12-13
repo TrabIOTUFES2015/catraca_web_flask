@@ -11,12 +11,15 @@ class Catraca(object):
 		self.id = id
 		self.sensorA = sensor1
 		self.sensorB = sensor2
+        #self.s1Tos2 = 0
+        #self.s2Tos1 = 0
 
 	def __eq__(self, other):
 		return self.id == other.id
 
 	def __str__(self):
-		return self.id , '|' , self.sensorA.id,  '|', self.sensorB.id
+		return "{0} | {1} | {2}".format(self.id, self.sensorA.id, self.sensorB.id)
+
 
 
 
@@ -105,7 +108,7 @@ class CatracaService(object):
 
 
 	def listarSensoresLivres(self):
-		sensoresEmCatracas = map(lambda catraca: [catraca.sensorA, catraca.sensorB], self.catracas)
+		sensoresEmCatracas = [sensor for sensorTuple in  (map(lambda catraca: (catraca.sensorA, catraca.sensorB), self.catracas)) for sensor in sensorTuple]
 		sensoresNaoUtilizados = [sensor for sensor in self.sensores if sensor not in sensoresEmCatracas]
 		return sensoresNaoUtilizados
 

@@ -27,6 +27,7 @@ $(document).ready(function(){
 	$( "#criar" ).click(criarCatraca);
 
 	$('#linkCriacao').click(recarregarCmbSensores);
+	$('#linkCatracas').click(recarregarCmbCatracas);
 
 	$('#linkSensores').click(
 		function clickLinkSensores(argument) {
@@ -85,6 +86,12 @@ function criarCatraca(){
 	  //exibe a pagina clicada
 	  $(page).fadeIn("slow");
 	  
+}
+
+function recarregarCmbCatracas() {
+    var cmbCatraca = $('#catraca')
+
+    cmbCatraca.load('/catracas')
 }
 
 function request(){

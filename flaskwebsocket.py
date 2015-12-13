@@ -77,11 +77,11 @@ def criarCatraca():
 
 @app.route('/catracas')
 def catracas():
-    catracas = service.catracas()
+    catracaList = service.catracas
     strHtml = ""
-    for s in catracas:
+    for s in catracaList:
         strId = str(s.id)
-        strHtml += "<option id=" + strId + ">TOS_NODE_ID=" + strId +"</option>"
+        strHtml += "<option id=" + strId + ">Catraca=" + strId +"</option>"
 
     return strHtml
 
