@@ -92,7 +92,7 @@ class CatracaService(object):
 				self.sensores.append(sensor)
 
 
-			if len(params) > 3 and nomePacote == 'LEITURA':
+			if len(params) > 2 and nomePacote == 'LEITURA':
 				valor = params[2]
 				sensor.addLeitura(valor)
 
